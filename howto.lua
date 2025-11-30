@@ -1,14 +1,22 @@
--- HΔ HOWTO HUB - FISH IT! | CLICK LOGO TO OPEN MENU
--- Mobile + PC Friendly • No Insert Key Needed
+-- HΔ HOWTO HUB - FISH IT! | POP-UP EDITION (Click Logo to Toggle)
+-- Based on original script + HΔ splash & clickable logo (no Insert needed)
 local Player = game.Players.LocalPlayer
 local UIS = game:GetService("UserInputService")
 local TS = game:GetService("TweenService")
 local VU = game:GetService("VirtualUser")
-local RS = game:GetService("ReplicatedStorage")
 
+getgenv().HubName = "HΔ HOWTO HUB"
 getgenv().ColorAccent = Color3.fromRGB(220, 20, 20)
+getgenv().ColorBG = Color3.fromRGB(15, 15, 15)
 
--- ==================== SPLASH SCREEN ====================
+-- Variabel status (all default OFF)
+getgenv().AutoFish = false
+getgenv().AutoSell = false
+getgenv().AutoBuyRod = false
+getgenv().AntiAFK = false
+getgenv().InfJump = false
+
+-- ==================== HΔ SPLASH SCREEN (Like Your Screenshot) ====================
 local Splash = Instance.new("ScreenGui")
 Splash.Name = "HDeltaSplash"
 Splash.Parent = game.CoreGui
@@ -25,7 +33,7 @@ Logo.Size = UDim2.new(0,0,0,0)
 Logo.Position = UDim2.new(0.5,0,0.5,-100)
 Logo.AnchorPoint = Vector2.new(0.5,0.5)
 Logo.BackgroundTransparency = 1
-Logo.Image = "https://i.imgur.com/1XzK7qP.png"
+Logo.Image = "https://i.imgur.com/1XzK7qP.png"  -- Black HΔ logo (match your screenshot)
 Logo.ImageTransparency = 1
 Logo.Parent = Splash
 
@@ -36,52 +44,51 @@ T1.AnchorPoint = Vector2.new(0.5,0.5)
 T1.BackgroundTransparency = 1
 T1.Text = "HΔ HOWTO HUB"
 T1.TextColor3 = Color3.new(1,1,1)
-T1.TextSize = 64
+T1.TextSize = 60
 T1.Font = Enum.Font.GothamBlack
 T1.TextTransparency = 1
 T1.Parent = Splash
 
 local T2 = Instance.new("TextLabel")
 T2.Size = UDim2.new(0,0,0,0)
-T2.Position = UDim2.new(0.5,0,0.5,170)
+T2.Position = UDim2.new(0.5,0,0.5,160)
 T2.AnchorPoint = Vector2.new(0.5,0.5)
 T2.BackgroundTransparency = 1
 T2.Text = "INSTANT FISH • Loaded"
 T2.TextColor3 = Color3.fromRGB(220,20,20)
-T2.TextSize = 38
+T2.TextSize = 36
 T2.Font = Enum.Font.GothamBold
 T2.TextTransparency = 1
 T2.Parent = Splash
 
-TS:Create(Bg, TweenInfo.new(0.8), {BackgroundTransparency = 0.4}):Play()
-TS:Create(Logo, TweenInfo.new(1.4, Enum.EasingStyle.Quint), {Size = UDim2.new(0,420,0,420), ImageTransparency = 0}):Play()
-TS:Create(T1, TweenInfo.new(1.6), {Size = UDim2.new(0,900,0,110), TextTransparency = 0}):Play()
+-- Splash animation
+TS:Create(Bg, TweenInfo.new(0.8), {BackgroundTransparency = 0.35}):Play()
+TS:Create(Logo, TweenInfo.new(1.4, Enum.EasingStyle.Quint), {Size = UDim2.new(0,380,0,380), ImageTransparency = 0}):Play()
+TS:Create(T1, TweenInfo.new(1.6), {Size = UDim2.new(0,800,0,100), TextTransparency = 0}):Play()
 task.wait(0.6)
-TS:Create(T2, TweenInfo.new(1.2), {Size = UDim2.new(0,700,0,70), TextTransparency = 0}):Play()
-task.wait(3.5)
-
-TS:Create(Logo, TweenInfo.new(0.8), {ImageTransparency = 1}):Play()
-TS:Create(T1, TweenInfo.new(0.8), {TextTransparency = 1}):Play()
-TS:Create(T2, TweenInfo.new(0.8), {TextTransparency = 1}):Play()
+TS:Create(T2, TweenInfo.new(1.2), {Size = UDim2.new(0,600,0,60), TextTransparency = 0}):Play()
+task.wait(3)
+TS:Create(Logo, TweenInfo.new(0.7), {ImageTransparency = 1}):Play()
+TS:Create(T1, TweenInfo.new(0.7), {TextTransparency = 1}):Play()
+TS:Create(T2, TweenInfo.new(0.7), {TextTransparency = 1}):Play()
 TS:Create(Bg, TweenInfo.new(1), {BackgroundTransparency = 1}):Play()
-task.wait(1.2)
+task.wait(1.1)
 Splash:Destroy()
 
--- ==================== HΔ LOGO (Click to Open Menu) ====================
+-- ==================== CLICKABLE HΔ LOGO (Always Visible, Bottom-Left) ====================
 local LogoGui = Instance.new("ScreenGui")
-LogoGui.Name = "HDeltaLogoGui"
+LogoGui.Name = "HDeltaLogo"
 LogoGui.Parent = game.CoreGui
 LogoGui.ResetOnSpawn = false
 
 local ClickLogo = Instance.new("ImageLabel")
-ClickLogo.Name = "HDeltaClick"
-ClickLogo.Size = UDim2.new(0, 120, 0, 120)
-ClickLogo.Position = UDim2.new(0, 20, 1, -140)  -- pojok kiri bawah (bisa diganti)
+ClickLogo.Size = UDim2.new(0,120,0,120)
+ClickLogo.Position = UDim2.new(0,20,1,-140)  -- Bottom-left corner
 ClickLogo.BackgroundTransparency = 1
-ClickLogo.Image = "https://i.imgur.com/1XzK7qP.png"
+ClickLogo.Image = "https://i.imgur.com/1XzK7qP.png"  -- HΔ logo
 ClickLogo.Parent = LogoGui
 
--- ==================== MAIN MENU ====================
+-- ==================== MAIN GUI MENU ====================
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.CoreGui
 ScreenGui.ResetOnSpawn = false
@@ -89,7 +96,7 @@ ScreenGui.ResetOnSpawn = false
 local Main = Instance.new("Frame")
 Main.Size = UDim2.new(0,460,0,580)
 Main.Position = UDim2.new(0.5,-230,0.5,-290)
-Main.BackgroundColor3 = Color3.fromRGB(15,15,15)
+Main.BackgroundColor3 = getgenv().ColorBG
 Main.Visible = false
 Main.Draggable = true
 Main.Active = true
@@ -103,7 +110,7 @@ Top.Parent = Main
 Instance.new("UICorner", Top).CornerRadius = UDim.new(0,14)
 
 local Title = Instance.new("TextLabel")
-Title.Text = "HΔ HOWTO HUB — FISH IT!"
+Title.Text = getgenv().HubName.." | FISH IT!"
 Title.Size = UDim2.new(0.75,0,1,0)
 Title.Position = UDim2.new(0,18,0,0)
 Title.BackgroundTransparency = 1
@@ -121,12 +128,6 @@ Close.BackgroundTransparency = 1
 Close.TextColor3 = Color3.new(1,1,1)
 Close.TextSize = 22
 Close.Parent = Top
-Close.MouseButton1Click:Connect(function() Main.Visible = false end)
-
--- KLIK LOGO = BUKA/TUTUP MENU
-ClickLogo.MouseButton1Click:Connect(function()
-    Main.Visible = not Main.Visible
-end)
 
 local Content = Instance.new("ScrollingFrame")
 Content.Size = UDim2.new(1,-20,1,-60)
@@ -134,104 +135,168 @@ Content.Position = UDim2.new(0,10,0,55)
 Content.BackgroundTransparency = 1
 Content.ScrollBarThickness = 5
 Content.ScrollBarImageColor3 = getgenv().ColorAccent
-Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
 Content.Parent = Main
-Instance.new("UIListLayout", Content).Padding = UDim.new(0,10)
 
-local function Notify(text)
-    game.StarterGui:SetCore("SendNotification", {Title = "HΔ HOWTO HUB", Text = text, Duration = 4})
-end
+local List = Instance.new("UIListLayout")
+List.Padding = UDim.new(0,10)
+List.Parent = Content
 
+-- Toggle & Button functions (English notifications)
 local function NewToggle(name, callback)
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1,0,0,46)
-    frame.BackgroundColor3 = Color3.fromRGB(22,22,22)
-    frame.Parent = Content
-    Instance.new("UICorner", frame).CornerRadius = UDim.new(0,10)
+    local Frame = Instance.new("Frame")
+    local Btn = Instance.new("TextButton")
+    local Ind = Instance.new("Frame")
+    Frame.Size = UDim2.new(1,0,0,46)
+    Frame.BackgroundColor3 = Color3.fromRGB(22,22,22)
+    Frame.Parent = Content
+    Instance.new("UICorner", Frame).CornerRadius = UDim.new(0,10)
 
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1,0,1,0)
-    btn.BackgroundTransparency = 1
-    btn.Text = "  "..name
-    btn.TextColor3 = Color3.new(1,1,1)
-    btn.TextSize = 17
-    btn.Font = Enum.Font.GothamSemibold
-    btn.TextXAlignment = Enum.TextXAlignment.Left
-    btn.Parent = frame
+    Btn.Size = UDim2.new(1,0,1,0)
+    Btn.BackgroundTransparency = 1
+    Btn.Text = "  "..name
+    Btn.TextColor3 = Color3.new(1,1,1)
+    Btn.TextSize = 17
+    Btn.Font = Enum.Font.GothamSemibold
+    Btn.TextXAlignment = Enum.TextXAlignment.Left
+    Btn.Parent = Frame
 
-    local ind = Instance.new("Frame")
-    ind.Size = UDim2.new(0,36,0,18)
-    ind.Position = UDim2.new(1,-50,0.5,-9)
-    ind.BackgroundColor3 = Color3.fromRGB(50,50,50)
-    ind.Parent = frame
-    Instance.new("UICorner", ind).CornerRadius = UDim.new(1,0)
+    Ind.Size = UDim2.new(0,36,0,18)
+    Ind.Position = UDim2.new(1,-50,0.5,-9)
+    Ind.BackgroundColor3 = Color3.fromRGB(50,50,50)
+    Ind.Parent = Frame
+    Instance.new("UICorner", Ind).CornerRadius = UDim.new(1,0)
 
-    local on = false
-    btn.MouseButton1Click:Connect(function()
-        on = not on
-        TS:Create(ind, TweenInfo.new(0.25), {BackgroundColor3 = on and getgenv().ColorAccent or Color3.fromRGB(50,50,50)}):Play()
-        callback(on)
+    local state = false
+    Btn.MouseButton1Click:Connect(function()
+        state = not state
+        TS:Create(Ind, TweenInfo.new(0.25), {BackgroundColor3 = state and getgenv().ColorAccent or Color3.fromRGB(50,50,50)}):Play()
+        callback(state)
     end)
 end
 
--- ==================== FEATURES ====================
-local InstantFishActive = false
-NewToggle("Instant Fish (No Reel)", function(v)
-    InstantFishActive = v
-    Notify(v and "Instant Fish ENABLED" or "Instant Fish DISABLED")
+local function NewButton(name, callback)
+    local Frame = Instance.new("Frame")
+    local Btn = Instance.new("TextButton")
+    Frame.Size = UDim2.new(1,0,0,46)
+    Frame.BackgroundColor3 = Color3.fromRGB(22,22,22)
+    Frame.Parent = Content
+    Instance.new("UICorner", Frame).CornerRadius = UDim.new(0,10)
+
+    Btn.Size = UDim2.new(1,0,1,0)
+    Btn.BackgroundTransparency = 1
+    Btn.Text = "  "..name
+    Btn.TextColor3 = Color3.new(1,1,1)
+    Btn.TextSize = 17
+    Btn.Font = Enum.Font.GothamSemibold
+    Btn.TextXAlignment = Enum.TextXAlignment.Left
+    Btn.Parent = Frame
+    Btn.MouseButton1Click:Connect(callback)
+end
+
+local function N(text)
+    game.StarterGui:SetCore("SendNotification", {Title = getgenv().HubName; Text = text; Duration = 4})
+end
+
+-- CLICK LOGO TO TOGGLE MENU (No Insert!)
+ClickLogo.MouseButton1Click:Connect(function()
+    Main.Visible = not Main.Visible
+end)
+Close.MouseButton1Click:Connect(function() Main.Visible = false end)
+
+-- ==================== FEATURES (English) ====================
+NewToggle("Auto Fish Ultra", function(v)
+    getgenv().AutoFish = v
+    N(v and "Auto Fish: ENABLED" or "Auto Fish: DISABLED")
+    if v then
+        spawn(function()
+            while getgenv().AutoFish do
+                pcall(function()
+                    local rod = Player.Backpack:FindFirstChildWhichIsA("Tool") or Player.Character:FindFirstChildWhichIsA("Tool")
+                    if rod then
+                        Player.Character.Humanoid:EquipTool(rod)
+                        task.wait(0.2)
+                        VU:ClickButton1(Vector2.new())
+                        task.wait(0.22)
+                        for i=1,45 do VU:ClickButton1(Vector2.new()) task.wait(0.012) end
+                        task.wait(0.18)
+                    end
+                end)
+                task.wait(0.03)
+            end
+        end)
+    end
 end)
 
-NewToggle("Auto Sell + Teleport", function(v)
+NewToggle("Auto Sell + TP", function(v)
     getgenv().AutoSell = v
-    Notify(v and "Auto Sell ENABLED" or "Auto Sell DISABLED")
+    N(v and "Auto Sell + TP: ENABLED" or "Auto Sell: DISABLED")
+end)
+spawn(function()
+    while task.wait(3) do
+        if getgenv().AutoSell and #Player.Backpack:GetChildren() >= 38 then
+            Player.Character.HumanoidRootPart.CFrame = CFrame.new(0,50,0)
+            task.wait(2)
+            for _,p in pairs(workspace:GetDescendants()) do
+                if p:IsA("ProximityPrompt") and p.Parent.Name:lower():find("sell") then
+                    fireproximityprompt(p)
+                end
+            end
+            task.wait(4)
+        end
+        task.wait(5)
+    end
 end)
 
 NewToggle("Auto Buy Best Rod", function(v)
     getgenv().AutoBuyRod = v
-    Notify(v and "Auto Buy Rod ENABLED" or "Auto Buy Rod DISABLED")
+    N(v and "Auto Buy Rod: ENABLED" or "Auto Buy Rod: DISABLED")
+end)
+spawn(function()
+    while true do
+        if getgenv().AutoBuyRod then
+            pcall(function()
+                for _,obj in pairs(workspace:GetDescendants()) do
+                    if obj:IsA("ProximityPrompt") and obj.Parent and obj.Parent.Name:find("Rod") and Player.leaderstats.Money.Value >= 500000 then
+                        Player.Character.HumanoidRootPart.CFrame = obj.Parent.CFrame
+                        task.wait(1)
+                        fireproximityprompt(obj)
+                        task.wait(2)
+                        break
+                    end
+                end
+            end)
+        end
+        task.wait(3)
+    end
 end)
 
 NewToggle("Anti-AFK", function(v)
     getgenv().AntiAFK = v
+    N(v and "Anti-AFK: ENABLED" or "Anti-AFK: DISABLED")
     if v then
         Player.Idled:Connect(function()
-            VU:Button2Down(Vector2.new(), workspace.CurrentCamera.CFrame)
+            VU:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
             task.wait(1)
-            VU:Button2Up(Vector2.new(), workspace.CurrentCamera.CFrame)
+            VU:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
         end)
     end
-    Notify(v and "Anti-AFK ENABLED" or "Anti-AFK DISABLED")
 end)
 
 NewToggle("Infinite Jump", function(v)
     getgenv().InfJump = v
-    Notify(v and "Infinite Jump ENABLED" or "Infinite Jump DISABLED")
+    N(v and "Infinite Jump: ENABLED" or "Infinite Jump: DISABLED")
 end)
-
 UIS.JumpRequest:Connect(function()
-    if getgenv().InfJump and Player.Character then
-        Player.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+    if getgenv().InfJump then
+        Player.Character:FindFirstChildOfClass('Humanoid'):ChangeState("Jumping")
     end
 end)
 
--- Instant Fish Loop
-spawn(function()
-    while task.wait(0.6) do
-        if InstantFishActive and Player.Character then
-            pcall(function()
-                local rod = Player.Backpack:FindFirstChildWhichIsA("Tool") or Player.Character:FindFirstChildWhichIsA("Tool")
-                if rod and rod.Name:lower():find("rod") then
-                    Player.Character.Humanoid:EquipTool(rod)
-                    task.wait(0.15)
-                    for _,v in pairs(getconnections(rod.Handle.Activated)) do v:Fire() end
-                    task.wait(0.05)
-                    RS.Events.Reel:FireServer(true)
-                    task.wait(0.05)
-                    RS.Events.Catch:FireServer()
-                end
-            end)
-        end
-    end
-end)
+-- Teleport Buttons
+NewButton("Ancient Jungle", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(-1247, 25, -1842) end)
+NewButton("Kohana Village", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(1520, 30, -930) end)
+NewButton("Bloodmoon Island", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(3200, 80, 2100) end)
+NewButton("Deep Ocean", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(-500, -200, -3000) end)
+NewButton("Spawn / Sell", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(0, 50, 0) end)
 
-Notify("HΔ HOWTO HUB Loaded! Click the HΔ logo to open menu")
+N("HΔ HOWTO HUB Loaded 100%! Click the HΔ logo to open menu")

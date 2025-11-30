@@ -1,5 +1,5 @@
--- HOWTO HUB - FISH IT! | HΔ Edition | MOBILE + PC FRIENDLY
--- Click the HΔ logo anytime to show/hide it (no Insert key needed)
+-- HΔ HOWTO HUB - FISH IT! | CLICK LOGO TO OPEN MENU
+-- Mobile + PC Friendly • No Insert Key Needed
 local Player = game.Players.LocalPlayer
 local UIS = game:GetService("UserInputService")
 local TS = game:GetService("TweenService")
@@ -58,7 +58,7 @@ TS:Create(Logo, TweenInfo.new(1.4, Enum.EasingStyle.Quint), {Size = UDim2.new(0,
 TS:Create(T1, TweenInfo.new(1.6), {Size = UDim2.new(0,900,0,110), TextTransparency = 0}):Play()
 task.wait(0.6)
 TS:Create(T2, TweenInfo.new(1.2), {Size = UDim2.new(0,700,0,70), TextTransparency = 0}):Play()
-task.wait(3.2)
+task.wait(3.5)
 
 TS:Create(Logo, TweenInfo.new(0.8), {ImageTransparency = 1}):Play()
 TS:Create(T1, TweenInfo.new(0.8), {TextTransparency = 1}):Play()
@@ -67,46 +67,21 @@ TS:Create(Bg, TweenInfo.new(1), {BackgroundTransparency = 1}):Play()
 task.wait(1.2)
 Splash:Destroy()
 
--- ==================== CLICKABLE HΔ POPUP (Mobile + PC) ====================
-local PopupGui = Instance.new("ScreenGui")
-PopupGui.Name = "HDeltaPopup"
-PopupGui.Parent = game.CoreGui
-PopupGui.ResetOnSpawn = false
+-- ==================== HΔ LOGO (Click to Open Menu) ====================
+local LogoGui = Instance.new("ScreenGui")
+LogoGui.Name = "HDeltaLogoGui"
+LogoGui.Parent = game.CoreGui
+LogoGui.ResetOnSpawn = false
 
-local PopupLogo = Instance.new("ImageLabel")
-PopupLogo.Name = "HDeltaLogo"
-PopupLogo.Size = UDim2.new(0, 380, 0, 380)
-PopupLogo.Position = UDim2.new(0.5, -190, 0.5, -190)
-PopupLogo.AnchorPoint = Vector2.new(0.5, 0.5)
-PopupLogo.BackgroundTransparency = 1
-PopupLogo.Image = "https://i.imgur.com/1XzK7qP.png"
-PopupLogo.Visible = true
-PopupLogo.Parent = PopupGui
+local ClickLogo = Instance.new("ImageLabel")
+ClickLogo.Name = "HDeltaClick"
+ClickLogo.Size = UDim2.new(0, 120, 0, 120)
+ClickLogo.Position = UDim2.new(0, 20, 1, -140)  -- pojok kiri bawah (bisa diganti)
+ClickLogo.BackgroundTransparency = 1
+ClickLogo.Image = "https://i.imgur.com/1XzK7qP.png"
+ClickLogo.Parent = LogoGui
 
--- Click logo = hide, click again anywhere on screen = show again
-local showing = true
-PopupLogo.MouseButton1Click:Connect(function()
-    showing = not showing
-    PopupLogo.Visible = showing
-end)
-
--- Tap anywhere on screen to bring it back if hidden
-UIS.InputBegan:Connect(function(input, gp)
-    if not gp and input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        if not showing then
-            showing = true
-            PopupLogo.Visible = true
-        end
-    end
-end)
-
-game.StarterGui:SetCore("SendNotification",{
-    Title = "HΔ HOWTO HUB",
-    Text = "Loaded! Tap the HΔ logo or screen to toggle",
-    Duration = 6
-})
-
--- ==================== MAIN MENU & FEATURES (English) ====================
+-- ==================== MAIN MENU ====================
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.CoreGui
 ScreenGui.ResetOnSpawn = false
@@ -128,7 +103,7 @@ Top.Parent = Main
 Instance.new("UICorner", Top).CornerRadius = UDim.new(0,14)
 
 local Title = Instance.new("TextLabel")
-Title.Text = "HOWTO HUB — FISH IT!"
+Title.Text = "HΔ HOWTO HUB — FISH IT!"
 Title.Size = UDim2.new(0.75,0,1,0)
 Title.Position = UDim2.new(0,18,0,0)
 Title.BackgroundTransparency = 1
@@ -148,8 +123,8 @@ Close.TextSize = 22
 Close.Parent = Top
 Close.MouseButton1Click:Connect(function() Main.Visible = false end)
 
--- Open menu by clicking the HΔ logo too
-PopupLogo.MouseButton1Click:Connect(function()
+-- KLIK LOGO = BUKA/TUTUP MENU
+ClickLogo.MouseButton1Click:Connect(function()
     Main.Visible = not Main.Visible
 end)
 
@@ -160,7 +135,6 @@ Content.BackgroundTransparency = 1
 Content.ScrollBarThickness = 5
 Content.ScrollBarImageColor3 = getgenv().ColorAccent
 Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
-Content.CanvasSize = UDim2.new(0,0,0,0)
 Content.Parent = Main
 Instance.new("UIListLayout", Content).Padding = UDim.new(0,10)
 
@@ -175,15 +149,15 @@ local function NewToggle(name, callback)
     frame.Parent = Content
     Instance.new("UICorner", frame).CornerRadius = UDim.new(0,10)
 
-    local button = Instance.new("TextButton")
-    button.Size = UDim2.new(1,0,1,0)
-    button.BackgroundTransparency = 1
-    button.Text = "  "..name
-    button.TextColor3 = Color3.new(1,1,1)
-    button.TextSize = 17
-    button.Font = Enum.Font.GothamSemibold
-    button.TextXAlignment = Enum.TextXAlignment.Left
-    button.Parent = frame
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1,0,1,0)
+    btn.BackgroundTransparency = 1
+    btn.Text = "  "..name
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.TextSize = 17
+    btn.Font = Enum.Font.GothamSemibold
+    btn.TextXAlignment = Enum.TextXAlignment.Left
+    btn.Parent = frame
 
     local ind = Instance.new("Frame")
     ind.Size = UDim2.new(0,36,0,18)
@@ -193,14 +167,14 @@ local function NewToggle(name, callback)
     Instance.new("UICorner", ind).CornerRadius = UDim.new(1,0)
 
     local on = false
-    button.MouseButton1Click:Connect(function()
+    btn.MouseButton1Click:Connect(function()
         on = not on
         TS:Create(ind, TweenInfo.new(0.25), {BackgroundColor3 = on and getgenv().ColorAccent or Color3.fromRGB(50,50,50)}):Play()
         callback(on)
     end)
 end
 
--- Features
+-- ==================== FEATURES ====================
 local InstantFishActive = false
 NewToggle("Instant Fish (No Reel)", function(v)
     InstantFishActive = v
@@ -235,7 +209,7 @@ NewToggle("Infinite Jump", function(v)
 end)
 
 UIS.JumpRequest:Connect(function()
-    if getgenv().InfJump then
+    if getgenv().InfJump and Player.Character then
         Player.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
     end
 end)
@@ -260,4 +234,4 @@ spawn(function()
     end
 end)
 
-Notify("HΔ HOWTO HUB • Fully Loaded! Tap logo to open menu")
+Notify("HΔ HOWTO HUB Loaded! Click the HΔ logo to open menu")

@@ -1,22 +1,25 @@
+-- HOWTO HUB - FISH IT! (FULL ENGLISH)
+-- 100% Original • Black & Blood Red Theme
+-- Load: loadstring(game:HttpGet("https://raw.githubusercontent.com/howtocodeascript/fist-it/refs/heads/main/howto.lua"))()
+
 local Player = game.Players.LocalPlayer
 local UIS = game:GetService("UserInputService")
 local TS = game:GetService("TweenService")
 local VU = game:GetService("VirtualUser")
 
--- Settingan kamu
 getgenv().HubName = "HOWTO HUB"
 getgenv().ToggleKey = Enum.KeyCode.Insert
 getgenv().ColorAccent = Color3.fromRGB(220, 20, 20)
 getgenv().ColorBG = Color3.fromRGB(15, 15, 15)
 
--- Variabel status (semua default MATI)
+-- Status (all OFF by default)
 getgenv().AutoFish = false
 getgenv().AutoSell = false
 getgenv().AutoBuyRod = false
 getgenv().AntiAFK = false
 getgenv().InfJump = false
 
--- === UI SAMA PERSIS KAYAK SEBELUMNYA (aku ringkas biar cepet) ===
+-- === UI ===
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.CoreGui
 ScreenGui.ResetOnSpawn = false
@@ -38,7 +41,8 @@ Top.Parent = Main
 Instance.new("UICorner", Top).CornerRadius = UDim.new(0,14)
 
 local Title = Instance.new("TextLabel")
-Title.Text = getgenv().HubName.." | FISH IT!"
+Title.Text = getgenv().HubName.." — FISH IT!"
+Title.Size = "HOWTO HUB — FISH IT!"
 Title.Size = UDim2.new(0.75,0,1,0)
 Title.Position = UDim2.new(0,18,0,0)
 Title.BackgroundTransparency = 1
@@ -69,7 +73,7 @@ local List = Instance.new("UIListLayout")
 List.Padding = UDim.new(0,10)
 List.Parent = Content
 
--- Toggle & Button function
+-- Functions
 local function NewToggle(name, callback)
     local Frame = Instance.new("Frame")
     local Btn = Instance.new("TextButton")
@@ -125,13 +129,17 @@ local function N(text)
     game.StarterGui:SetCore("SendNotification", {Title = getgenv().HubName; Text = text; Duration = 4})
 end
 
-UIS.InputBegan:Connect(function(i) if i.KeyCode == getgenv().ToggleKey then Main.Visible = not Main.Visible end end)
+UIS.InputBegan:Connect(function(i)
+    if i.KeyCode == getgenv().ToggleKey then
+        Main.Visible = not Main.Visible
+    end
+end)
 Close.MouseButton1Click:Connect(function() Main.Visible = false end)
 
--- === SEMUA FITUR + ON/OFF SENDIRI ===
+-- === ENGLISH MENU ===
 NewToggle("Auto Fish Ultra", function(v)
     getgenv().AutoFish = v
-    N(v and "Auto Fish NYALA" or "Auto Fish MATI")
+    N(v and "Auto Fish ENABLED" or "Auto Fish DISABLED")
     if v then
         spawn(function()
             while getgenv().AutoFish do
@@ -152,53 +160,19 @@ NewToggle("Auto Fish Ultra", function(v)
     end
 end)
 
-NewToggle("Auto Sell + TP", function(v)
+NewToggle("Auto Sell + Teleport", function(v)
     getgenv().AutoSell = v
-    N(v and "Auto Sell + TP NYALA" or "Auto Sell MATI")
-end)
-spawn(function()
-    while task.wait(3)
-    while true do
-        if getgenv().AutoSell and #Player.Backpack:GetChildren() >= 38 then
-            Player.Character.HumanoidRootPart.CFrame = CFrame.new(0,50,0) -- spawn/sell area
-            task.wait(2)
-            for _,p in pairs(workspace:GetDescendants()) do
-                if p:IsA("ProximityPrompt") and p.Parent.Name:lower():find("sell") then
-                    fireproximityprompt(p)
-                end
-            end
-            task.wait(4)
-        end
-        task.wait(5)
-    end
+    N(v and "Auto Sell + TP ENABLED" or "Auto Sell DISABLED")
 end)
 
 NewToggle("Auto Buy Best Rod", function(v)
     getgenv().AutoBuyRod = v
-    N(v and "Auto Buy Rod NYALA" or "Auto Buy Rod MATI")
-end)
-spawn(function()
-    while true do
-        if getgenv().AutoBuyRod then
-            pcall(function()
-                for _,obj in pairs(workspace:GetDescendants()) do
-                    if obj:IsA("ProximityPrompt") and obj.Parent and obj.Parent.Name:find("Rod") and Player.leaderstats.Money.Value >= 500000 then -- contoh harga tinggi
-                        Player.Character.HumanoidRootPart.CFrame = obj.Parent.CFrame
-                        task.wait(1)
-                        fireproximityprompt(obj)
-                        task.wait(2)
-                        break
-                    end
-                end
-            end)
-        end
-        task.wait(3)
-    end
+    N(v and "Auto Buy Rod ENABLED" or "Auto Buy Rod DISABLED")
 end)
 
 NewToggle("Anti-AFK", function(v)
     getgenv().AntiAFK = v
-    N(v and "Anti-AFK NYALA" or "Anti-AFK MATI")
+    N(v and "Anti-AFK ENABLED" or "Anti-AFK DISABLED")
     if v then
         Player.Idled:Connect(function()
             VU:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
@@ -210,7 +184,7 @@ end)
 
 NewToggle("Infinite Jump", function(v)
     getgenv().InfJump = v
-    N(v and "Infinite Jump NYALA" or "Infinite Jump MATI")
+    N(v and "Infinite Jump ENABLED" or "Infinite Jump DISABLED")
 end)
 UIS.JumpRequest:Connect(function()
     if getgenv().InfJump then
@@ -218,11 +192,49 @@ UIS.JumpRequest:Connect(function()
     end
 end)
 
--- Teleport Buttons (bisa dipenc aja nyala)
+-- Teleports
 NewButton("Ancient Jungle", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(-1247, 25, -1842) end)
 NewButton("Kohana Village", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(1520, 30, -930) end)
 NewButton("Bloodmoon Island", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(3200, 80, 2100) end)
 NewButton("Deep Ocean", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(-500, -200, -3000) end)
-NewButton("Spawn / Sell", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(0, 50, 0) end)
+NewButton("Spawn / Sell Area", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(0, 50, 0) end)
 
-N("HOWTO HUB FISH IT! Loaded 100%\nSemua fitur bisa ON/OFF sendiri\nTekan INSERT buat buka menu")
+-- Auto Sell Loop (fixed)
+spawn(function()
+    while true do
+        if getgenv().AutoSell and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") and #Player.Backpack:GetChildren() >= 38 then
+            Player.Character.HumanoidRootPart.CFrame = CFrame.new(0, 50, 0)
+            task.wait(2)
+            for _,p in pairs(workspace:GetDescendants()) do
+                if p:IsA("ProximityPrompt") and (p.Parent.Name:lower():find("sell") or p.ObjectText:lower():find("sell")) then
+                    fireproximityprompt(p)
+                end
+            end
+            task.wait(4)
+        end
+        task.wait(5)
+    end
+end)
+
+-- Auto Buy Rod Loop
+spawn(function()
+    while true do
+        task.wait(3)
+        if getgenv().AutoBuyRod then
+            pcall(function()
+                for _,obj in pairs(workspace:GetDescendants()) do
+                    if obj:IsA("ProximityPrompt") and obj.Parent and obj.Parent.Name:find("Rod") then
+                        if Player.leaderstats.Money.Value >= 500000 then -- adjust price if needed
+                            Player.Character.HumanoidRootPart.CFrame = obj.Parent.CFrame
+                            task.wait(1)
+                            fireproximityprompt(obj)
+                            task.wait(2)
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+N("HOWTO HUB successfully loaded!\nPress INSERT to open menu\nAll features can be toggled")

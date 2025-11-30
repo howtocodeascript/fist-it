@@ -84,7 +84,7 @@ local ClickLogo = Instance.new("ImageLabel")
 ClickLogo.Size = UDim2.new(0, 120, 0, 120)
 ClickLogo.Position = UDim2.new(0, 20, 1, -140)  -- Bottom-left corner
 ClickLogo.BackgroundTransparency = 1
-ClickLogo.Image = "https://i.imgur.com/1XzK7qP.png"
+ClickLogo.Image = "WhatsApp%20Image%202025-11-30%20at%2022.18.38.webp"
 ClickLogo.Parent = LogoGui
 
 -- ==================== MAIN GUI MENU ====================

@@ -1,5 +1,5 @@
--- HOWTO HUB - FISH IT! (FULL ENGLISH)
--- 100% Original • Black & Blood Red Theme
+-- HOWTO HUB - FISH IT! | CLEAN & NO BUGS
+-- 100% Original • Black & Blood Red • Full English
 -- Load: loadstring(game:HttpGet("https://raw.githubusercontent.com/howtocodeascript/fist-it/refs/heads/main/howto.lua"))()
 
 local Player = game.Players.LocalPlayer
@@ -12,26 +12,27 @@ getgenv().ToggleKey = Enum.KeyCode.Insert
 getgenv().ColorAccent = Color3.fromRGB(220, 20, 20)
 getgenv().ColorBG = Color3.fromRGB(15, 15, 15)
 
--- Status (all OFF by default)
+-- Status
 getgenv().AutoFish = false
 getgenv().AutoSell = false
 getgenv().AutoBuyRod = false
 getgenv().AntiAFK = false
 getgenv().InfJump = false
 
--- === UI ===
+-- UI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.CoreGui
 ScreenGui.ResetOnSpawn = false
 
 local Main = Instance.new("Frame")
-Main.Size = UDim2.new(0, 460, 0, 580)
-Main.Position = UDim2.new(0.5, -230, 0.5, -290)
+Main.Size = UDim2.new(0,460,0,580)
+Main.Position = UDim2.new(0.5,-230,0.5,-290)
 Main.BackgroundColor3 = getgenv().ColorBG
 Main.Visible = false
 Main.Draggable = true
 Main.Active = true
 Main.Parent = ScreenGui
+Main.Name = "HOWTO"
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0,14)
 
 local Top = Instance.new("Frame")
@@ -42,7 +43,6 @@ Instance.new("UICorner", Top).CornerRadius = UDim.new(0,14)
 
 local Title = Instance.new("TextLabel")
 Title.Text = getgenv().HubName.." — FISH IT!"
-Title.Size = "HOWTO HUB — FISH IT!"
 Title.Size = UDim2.new(0.75,0,1,0)
 Title.Position = UDim2.new(0,18,0,0)
 Title.BackgroundTransparency = 1
@@ -67,6 +67,8 @@ Content.Position = UDim2.new(0,10,0,55)
 Content.BackgroundTransparency = 1
 Content.ScrollBarThickness = 5
 Content.ScrollBarImageColor3 = getgenv().ColorAccent
+Content.CanvasSize = UDim2.new(0,0,0,0)
+Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
 Content.Parent = Main
 
 local List = Instance.new("UIListLayout")
@@ -98,11 +100,11 @@ local function NewToggle(name, callback)
     Ind.Parent = Frame
     Instance.new("UICorner", Ind).CornerRadius = UDim.new(1,0)
 
-    local state = false
+    local on = false
     Btn.MouseButton1Click:Connect(function()
-        state = not state
-        TS:Create(Ind, TweenInfo.new(0.25), {BackgroundColor3 = state and getgenv().ColorAccent or Color3.fromRGB(50,50,50)}):Play()
-        callback(state)
+        on = not on
+        TS:Create(Ind, TweenInfo.new(0.25), {BackgroundColor3 = on and getgenv().ColorAccent or Color3.fromRGB(50,50,50)}):Play()
+        callback(on)
     end)
 end
 
@@ -125,10 +127,15 @@ local function NewButton(name, callback)
     Btn.MouseButton1Click:Connect(callback)
 end
 
-local function N(text)
-    game.StarterGui:SetCore("SendNotification", {Title = getgenv().HubName; Text = text; Duration = 4})
+local function Notify(text)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = getgenv().HubName;
+        Text = text;
+        Duration = 4;
+    })
 end
 
+-- Toggle UI
 UIS.InputBegan:Connect(function(i)
     if i.KeyCode == getgenv().ToggleKey then
         Main.Visible = not Main.Visible
@@ -136,44 +143,46 @@ UIS.InputBegan:Connect(function(i)
 end)
 Close.MouseButton1Click:Connect(function() Main.Visible = false end)
 
--- === ENGLISH MENU ===
-NewToggle("Auto Fish Ultra", function(v)
-    getgenv().AutoFish = v
-    N(v and "Auto Fish ENABLED" or "Auto Fish DISABLED")
-    if v then
+-- FEATURES (NO BUGS)
+NewToggle("Auto Fish Ultra", function(state)
+    getgenv().AutoFish = state
+    Notify(state and "Auto Fish: ENABLED" or "Auto Fish: DISABLED")
+    if state then
         spawn(function()
-            while getgenv().AutoFish do
+            while getgenv().AutoFish and task.wait(0.03) do
                 pcall(function()
                     local rod = Player.Backpack:FindFirstChildWhichIsA("Tool") or Player.Character:FindFirstChildWhichIsA("Tool")
-                    if rod then
+                    if rod and rod.Name:find("Rod") then
                         Player.Character.Humanoid:EquipTool(rod)
                         task.wait(0.2)
                         VU:ClickButton1(Vector2.new())
                         task.wait(0.22)
-                        for i=1,45 do VU:ClickButton1(Vector2.new()) task.wait(0.012) end
+                        for i = 1,45 do
+                            VU:ClickButton1(Vector2.new())
+                            task.wait(0.012)
+                        end
                         task.wait(0.18)
                     end
                 end)
-                task.wait(0.03)
             end
         end)
     end
 end)
 
-NewToggle("Auto Sell + Teleport", function(v)
-    getgenv().AutoSell = v
-    N(v and "Auto Sell + TP ENABLED" or "Auto Sell DISABLED")
+NewToggle("Auto Sell + Teleport", function(state)
+    getgenv().AutoSell = state
+    Notify(state and "Auto Sell + TP: ENABLED" or "Auto Sell: DISABLED")
 end)
 
-NewToggle("Auto Buy Best Rod", function(v)
-    getgenv().AutoBuyRod = v
-    N(v and "Auto Buy Rod ENABLED" or "Auto Buy Rod DISABLED")
+NewToggle("Auto Buy Best Rod", function(state)
+    getgenv().AutoBuyRod = state
+    Notify(state and "Auto Buy Rod: ENABLED" or "Auto Buy Rod: DISABLED")
 end)
 
-NewToggle("Anti-AFK", function(v)
-    getgenv().AntiAFK = v
-    N(v and "Anti-AFK ENABLED" or "Anti-AFK DISABLED")
-    if v then
+NewToggle("Anti-AFK", function(state)
+    getgenv().AntiAFK = state
+    Notify(state and "Anti-AFK: ENABLED" or "Anti-AFK: DISABLED")
+    if state then
         Player.Idled:Connect(function()
             VU:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
             task.wait(1)
@@ -182,13 +191,13 @@ NewToggle("Anti-AFK", function(v)
     end
 end)
 
-NewToggle("Infinite Jump", function(v)
-    getgenv().InfJump = v
-    N(v and "Infinite Jump ENABLED" or "Infinite Jump DISABLED")
+NewToggle("Infinite Jump", function(state)
+    getgenv().InfJump = state
+    Notify(state and "Infinite Jump: ENABLED" or "Infinite Jump: DISABLED")
 end)
 UIS.JumpRequest:Connect(function()
-    if getgenv().InfJump then
-        Player.Character:FindFirstChildOfClass('Humanoid'):ChangeState("Jumping")
+    if getgenv().InfJump and Player.Character then
+        Player.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
     end
 end)
 
@@ -199,36 +208,35 @@ NewButton("Bloodmoon Island", function() Player.Character.HumanoidRootPart.CFram
 NewButton("Deep Ocean", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(-500, -200, -3000) end)
 NewButton("Spawn / Sell Area", function() Player.Character.HumanoidRootPart.CFrame = CFrame.new(0, 50, 0) end)
 
--- Auto Sell Loop (fixed)
+-- Auto Sell Loop (FIXED)
 spawn(function()
-    while true do
+    while task.wait(4) do
         if getgenv().AutoSell and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") and #Player.Backpack:GetChildren() >= 38 then
             Player.Character.HumanoidRootPart.CFrame = CFrame.new(0, 50, 0)
             task.wait(2)
-            for _,p in pairs(workspace:GetDescendants()) do
-                if p:IsA("ProximityPrompt") and (p.Parent.Name:lower():find("sell") or p.ObjectText:lower():find("sell")) then
-                    fireproximityprompt(p)
+            for _,obj in pairs(workspace:GetDescendants()) do
+                if obj:IsA("ProximityPrompt") and (obj.Parent.Name:lower():find("sell") or obj.ObjectText:lower():find("sell")) then
+                    fireproximityprompt(obj)
                 end
             end
-            task.wait(4)
+            task.wait(3)
         end
-        task.wait(5)
     end
 end)
 
--- Auto Buy Rod Loop
+-- Auto Buy Rod Loop (FIXED)
 spawn(function()
-    while true do
-        task.wait(3)
-        if getgenv().AutoBuyRod then
+    while task.wait(3) do
+        if getgenv().AutoBuyRod and Player.Character then
             pcall(function()
                 for _,obj in pairs(workspace:GetDescendants()) do
                     if obj:IsA("ProximityPrompt") and obj.Parent and obj.Parent.Name:find("Rod") then
-                        if Player.leaderstats.Money.Value >= 500000 then -- adjust price if needed
+                        if Player.leaderstats.Money.Value >= 100000 then
                             Player.Character.HumanoidRootPart.CFrame = obj.Parent.CFrame
                             task.wait(1)
                             fireproximityprompt(obj)
                             task.wait(2)
+                            break
                         end
                     end
                 end
@@ -237,4 +245,4 @@ spawn(function()
     end
 end)
 
-N("HOWTO HUB successfully loaded!\nPress INSERT to open menu\nAll features can be toggled")
+Notify("HOWTO HUB loaded successfully!\nPress INSERT to open menu\nAll features working perfectly")

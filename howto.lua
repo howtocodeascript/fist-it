@@ -33,7 +33,7 @@ Logo.Size = UDim2.new(0,0,0,0)
 Logo.Position = UDim2.new(0.5,0,0.5,-100)
 Logo.AnchorPoint = Vector2.new(0.5,0.5)
 Logo.BackgroundTransparency = 1
-Logo.Image = "https://i.imgur.com/1XzK7qP.png"  -- Black HΔ logo (match screenshot)
+Logo.Image = "WhatsApp%20Image%202025-11-30%20at%2022.18.38%20(1).jpg"  -- Black HΔ logo (match screenshot)
 Logo.ImageTransparency = 1
 Logo.Parent = Splash
 
